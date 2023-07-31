@@ -46,6 +46,7 @@ public:
 		return std::lexicographical_compare(domains_.rbegin(), domains_.rend(), input.domains_.rbegin(), input.domains_.rend());
 	}
 
+
 	// разработайте operator==
 	bool operator==(const Domain& input) const {
 		return domain_string_ == input.domain_string_;
@@ -81,11 +82,11 @@ public:
 		if (forbidden_domains.size() == 0) return false;
 
 		auto iter = std::lower_bound(forbidden_domains.begin(), forbidden_domains.end(), input);
-		if (iter == forbidden_domains.begin()) return false;
 		if (iter == forbidden_domains.end()) {
 			return input.IsSubdomain(*(iter - 1));
 		};
 		if (*iter == input) return true;
+		if (iter == forbidden_domains.begin()) return false;
 		return input.IsSubdomain(*(iter - 1));
 	}
 private:
