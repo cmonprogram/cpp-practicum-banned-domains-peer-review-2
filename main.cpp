@@ -12,7 +12,7 @@ class Domain {
 public:
 	// разработайте класс домена
 	// конструктор должен позволять конструирование из string, с сигнатурой определитесь сами
-	Domain(const string& input) : domain_string_(input) {
+	Domain(string input) : domain_string_(std::move(input)) {
 		int first = 0;
 		int last = 0;
 		for (const char& ch : domain_string_) {
