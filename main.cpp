@@ -7,28 +7,26 @@
 #include <algorithm>
 
 using namespace std;
-class DomainChecker;
 
 class Domain {
-	friend DomainChecker;
 public:
 	// разработайте класс домена
 	// конструктор должен позволять конструирование из string, с сигнатурой определитесь сами
-	Domain(const string& input) : domain_string(input){
+	Domain(const string& input) : domain_string_(input) {
 		int first = 0;
 		int last = 0;
-		for (const char& ch : domain_string) {
+		for (const char& ch : domain_string_) {
 			if (ch != '.') {
 				++last;
 			}
 			else {
-				domains.emplace_back(&domain_string.at(first), last - first);
+				domains_.emplace_back(&domain_string_.at(first), last - first);
 				++last;
 				first = last;
 			}
 		}
 		if (first != last) {
-			domains.emplace_back(&domain_string.at(first), last - first);
+			domains_.emplace_back(&domain_string_.at(first), last - first);
 		}
 	}
 
@@ -37,33 +35,33 @@ public:
 		if (this == &input) {
 			return *this;
 		}
-		domain_string = input.domain_string;
-		domains = input.domains;
+		domain_string_ = input.domain_string_;
+		domains_ = input.domains_;
 		return *this;
 	}
 
-	/*
+
 	// operator<
 	bool operator<(const Domain& input) const {
-		return domain_string < input.domain_string;
+		return std::lexicographical_compare(domains_.rbegin(), domains_.rend(), input.domains_.rbegin(), input.domains_.rend());
 	}
-	*/
 
 	// разработайте operator==
 	bool operator==(const Domain& input) const {
-		return domain_string == input.domain_string;
+		return domain_string_ == input.domain_string_;
 	}
 	// разработайте метод IsSubdomain, принимающий другой домен и возвращающий true, если this его поддомен
 	bool IsSubdomain(const Domain& input) const {
-		if (this->domains.size() <= input.domains.size()) return false;
-		for (int i = this->domains.size() - 1, j = input.domains.size() - 1; i >= 0 && j >= 0; --i, --j) {
-			if (domains.at(i) != input.domains.at(j)) return false;
+		if (this->domains_.size() <= input.domains_.size()) return false;
+		for (int i = this->domains_.size() - 1, j = input.domains_.size() - 1; i >= 0 && j >= 0; --i, --j) {
+			if (domains_.at(i) != input.domains_.at(j)) return false;
 		}
 		return true;
 	}
+
 private:
-	string domain_string;
-	vector<string_view> domains;
+	string domain_string_;
+	vector<string_view> domains_;
 };
 
 class DomainChecker {
@@ -72,9 +70,7 @@ public:
 	// конструктор должен принимать список запрещённых доменов через пару итераторов
 	template <typename Iterator>
 	DomainChecker(Iterator begin, Iterator end) : forbidden_domains(begin, end) {
-		sort(forbidden_domains.begin(), forbidden_domains.end(), [](const Domain& lhs, const Domain& rhs) {
-			return std::lexicographical_compare(lhs.domains.rbegin(), lhs.domains.rend(), rhs.domains.rbegin(), rhs.domains.rend());
-			});
+		sort(forbidden_domains.begin(), forbidden_domains.end());
 		auto last = unique(forbidden_domains.begin(), forbidden_domains.end(), [](const Domain& lhs, const Domain& rhs) {
 			return rhs.IsSubdomain(lhs);
 			});
@@ -82,22 +78,15 @@ public:
 	}
 	// разработайте метод IsForbidden, возвращающий true, если домен запрещён
 	bool IsForbidden(const Domain& input) {
-		if (input.domains.size() == 0) return true;
 		if (forbidden_domains.size() == 0) return false;
 
-		auto iter = std::lower_bound(forbidden_domains.begin(), forbidden_domains.end(), input, [](const Domain& lhs, const Domain& rhs) {
-			return std::lexicographical_compare(lhs.domains.rbegin(), lhs.domains.rend(), rhs.domains.rbegin(), rhs.domains.rend());
-			});
+		auto iter = std::lower_bound(forbidden_domains.begin(), forbidden_domains.end(), input);
+		if (iter == forbidden_domains.begin()) return false;
 		if (iter == forbidden_domains.end()) {
 			return input.IsSubdomain(*(iter - 1));
 		};
 		if (*iter == input) return true;
-		if (iter == forbidden_domains.begin()) {
-			return input.IsSubdomain(*(iter));
-		}
-		else {
-			return input.IsSubdomain(*(iter - 1));
-		}
+		return input.IsSubdomain(*(iter - 1));
 	}
 private:
 	std::vector<Domain> forbidden_domains;
