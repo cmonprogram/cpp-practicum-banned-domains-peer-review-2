@@ -12,8 +12,8 @@ class DomainChecker;
 class Domain {
 	friend DomainChecker;
 public:
-	// разработайте класс домена
-	// конструктор должен позволять конструирование из string, с сигнатурой определитесь сами
+	// СЂР°Р·СЂР°Р±РѕС‚Р°Р№С‚Рµ РєР»Р°СЃСЃ РґРѕРјРµРЅР°
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґРѕР»Р¶РµРЅ РїРѕР·РІРѕР»СЏС‚СЊ РєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°РЅРёРµ РёР· string, СЃ СЃРёРіРЅР°С‚СѓСЂРѕР№ РѕРїСЂРµРґРµР»РёС‚РµСЃСЊ СЃР°РјРё
 	Domain(const string& input) : domain_string(input){
 		int first = 0;
 		int last = 0;
@@ -49,11 +49,11 @@ public:
 	}
 	*/
 
-	// разработайте operator==
+	// СЂР°Р·СЂР°Р±РѕС‚Р°Р№С‚Рµ operator==
 	bool operator==(const Domain& input) const {
 		return domain_string == input.domain_string;
 	}
-	// разработайте метод IsSubdomain, принимающий другой домен и возвращающий true, если this его поддомен
+	// СЂР°Р·СЂР°Р±РѕС‚Р°Р№С‚Рµ РјРµС‚РѕРґ IsSubdomain, РїСЂРёРЅРёРјР°СЋС‰РёР№ РґСЂСѓРіРѕР№ РґРѕРјРµРЅ Рё РІРѕР·РІСЂР°С‰Р°СЋС‰РёР№ true, РµСЃР»Рё this РµРіРѕ РїРѕРґРґРѕРјРµРЅ
 	bool IsSubdomain(const Domain& input) const {
 		if (this->domains.size() <= input.domains.size()) return false;
 		for (int i = this->domains.size() - 1, j = input.domains.size() - 1; i >= 0 && j >= 0; --i, --j) {
@@ -69,7 +69,7 @@ private:
 class DomainChecker {
 
 public:
-	// конструктор должен принимать список запрещённых доменов через пару итераторов
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґРѕР»Р¶РµРЅ РїСЂРёРЅРёРјР°С‚СЊ СЃРїРёСЃРѕРє Р·Р°РїСЂРµС‰С‘РЅРЅС‹С… РґРѕРјРµРЅРѕРІ С‡РµСЂРµР· РїР°СЂСѓ РёС‚РµСЂР°С‚РѕСЂРѕРІ
 	template <typename Iterator>
 	DomainChecker(Iterator begin, Iterator end) : forbidden_domains(begin, end) {
 		sort(forbidden_domains.begin(), forbidden_domains.end(), [](const Domain& lhs, const Domain& rhs) {
@@ -80,7 +80,7 @@ public:
 			});
 		forbidden_domains.erase(last, forbidden_domains.end());
 	}
-	// разработайте метод IsForbidden, возвращающий true, если домен запрещён
+	// СЂР°Р·СЂР°Р±РѕС‚Р°Р№С‚Рµ РјРµС‚РѕРґ IsForbidden, РІРѕР·РІСЂР°С‰Р°СЋС‰РёР№ true, РµСЃР»Рё РґРѕРјРµРЅ Р·Р°РїСЂРµС‰С‘РЅ
 	bool IsForbidden(const Domain& input) {
 		if (input.domains.size() == 0) return true;
 		if (forbidden_domains.size() == 0) return false;
@@ -103,7 +103,7 @@ private:
 	std::vector<Domain> forbidden_domains;
 };
 
-// разработайте функцию ReadDomains, читающую заданное количество доменов из стандартного входа
+// СЂР°Р·СЂР°Р±РѕС‚Р°Р№С‚Рµ С„СѓРЅРєС†РёСЋ ReadDomains, С‡РёС‚Р°СЋС‰СѓСЋ Р·Р°РґР°РЅРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РґРѕРјРµРЅРѕРІ РёР· СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ РІС…РѕРґР°
 template <typename Number>
 const std::vector<Domain> ReadDomains(std::istream& input, Number num) {
 	std::vector<Domain> result;
