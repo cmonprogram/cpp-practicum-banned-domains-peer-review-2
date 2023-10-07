@@ -10,8 +10,8 @@ using namespace std;
 
 class Domain {
 public:
-	// разработайте класс домена
-	// конструктор должен позволять конструирование из string, с сигнатурой определитесь сами
+	// класс домена
+	// конструктор должен позволять конструирование из string
 	Domain(string input) : domain_string_(std::move(input)) {
 		int first = 0;
 		int last = 0;
