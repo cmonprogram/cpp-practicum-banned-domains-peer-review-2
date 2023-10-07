@@ -47,11 +47,11 @@ public:
 	}
 
 
-	// разработайте operator==
+	// operator==
 	bool operator==(const Domain& input) const {
 		return domain_string_ == input.domain_string_;
 	}
-	// разработайте метод IsSubdomain, принимающий другой домен и возвращающий true, если this его поддомен
+	// метод IsSubdomain, принимающий другой домен и возвращающий true, если this его поддомен
 	bool IsSubdomain(const Domain& input) const {
 		if (this->domains_.size() <= input.domains_.size()) return false;
 		for (int i = this->domains_.size() - 1, j = input.domains_.size() - 1; i >= 0 && j >= 0; --i, --j) {
